@@ -26,19 +26,22 @@ for line in fileinput.input():
 
     if '%s' in section['path']:
         section['path'] = section['path'] % branch
-    if new_ref == '0000000000000000000000000000000000000000' and \
-                    section.get('deletable', 'false').lower() in ('true', 'off', '0', 'no'):
-        print 'Deleting branch', branch
-        check_output(['rm', '-rf', section['path']])
-    else:
-        print 'Checking out', branch, 'in', section['path']
-        check_output(['rm', '-rf', section['path']])
-        if not os.path.exists(section['path']):
-            os.makedirs(section['path'])
-        os.environ['GIT_WORK_TREE'] = section['path']
-        file_name = 'branch-' + branch + '.tar.gz'
-        check_output(['git','archive', '--format=tar.gz', '-o'+file_name, branch])
-        old_dir = os.getcwd()
-        os.chdir(section['path'])
-        file_path = os.path.join(old_dir, file_name)
-        check_output(['tar', 'xf', file_path])
+    if new_ref == '0000000000000000000000000000000000000000':
+        if section.get('deletable', 'false').lower() in ('true', 'off', '0', 'no'):
+            print 'Deleting branch', branch
+            check_output(['rm', '-rf', section['path']])
+        else:
+            print 'Branch is not deletable'
+        exit()
+
+    print 'Checking out', branch, 'in', section['path']
+    check_output(['rm', '-rf', section['path']])
+    if not os.path.exists(section['path']):
+        os.makedirs(section['path'])
+    os.environ['GIT_WORK_TREE'] = section['path']
+    file_name = 'branch-' + branch + '.tar.gz'
+    check_output(['git','archive', '--format=tar.gz', '-o'+file_name, branch])
+    old_dir = os.getcwd()
+    os.chdir(section['path'])
+    file_path = os.path.join(old_dir, file_name)
+    check_output(['tar', 'xf', file_path])
