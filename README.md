@@ -7,10 +7,8 @@ directory.
 
 Example of usage:
 ```
-# '%' denotes remote ssh session
-# '$' denotes local session
-$ ssh -oForwardAgent=yes machine
 % git init --bare ~/puppet
 % cd puppet/hooks
-% git archive --remote=https://github.com/fonlabs/git-deploy-hook.git master | tar xf - 
+% wget https://github.com/fonlabs/git-deploy-hook/archive/master.tar.gz -O - | tar --strip-components=1 -xzf -
+% mv deploy_config ../
 ```
