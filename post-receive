@@ -29,9 +29,10 @@ for line in fileinput.input():
     if new_ref == '0000000000000000000000000000000000000000' and \
                     section.get('deletable', 'false').lower() in ('true', 'off', '0', 'no'):
         print 'Deleting branch', branch
-        check_output('rm -rf ' + section['path'])
+        check_output(['rm', '-rf', section['path']])
     else:
         print 'Checking out', branch, 'in', section['path']
+        check_output(['rm', '-rf', section['path']])
         if not os.path.exists(section['path']):
             os.makedirs(section['path'])
         os.environ['GIT_WORK_TREE'] = section['path']
