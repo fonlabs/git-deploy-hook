@@ -1,0 +1,7 @@
+[master]
+path = /home/gp/deploy/main
+deletable = true
+
+[*]
+path = /home/gp/deploy/%s
+deletable = true
